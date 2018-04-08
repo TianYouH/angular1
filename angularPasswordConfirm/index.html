@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="renderer" content="webkit" />
+  <meta name="applicable-device" content="pc">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="author" content="天幽">
+  <script src="libs/angular.js"></script>
+  <title></title>
+</head>
+
+<body ng-app="Valid">
+
+  <form name="form">
+    <input type="password" name="password" ng-model="password" required placeholder="请输入密码">
+    <input type="password" name="passwordConfirm" ng-model="passwordConfirm" equal-to="password" placeholder="请再次输入密码">
+    <span ng-if="form.password.$dirty" ng-show="form.passwordConfirm.$error.equalTo">两次密码不一致</span>
+  </form>
+
+  <script src="application.js"></script>
+</body>
+
+</html>
