@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="renderer" content="webkit" />
+  <meta name="applicable-device" content="pc">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="author" content="黄金亮">
+  <link rel="stylesheet" href="index.css">
+  <title>工资计算器</title>
+  <script src="https://cdn.bootcss.com/angular.js/1.6.9/angular.js"></script>
+  <script src="https://cdn.bootcss.com/ngStorage/0.3.11/ngStorage.js"></script>
+</head>
+
+<body ng-cloak ng-app="GZ" ng-controller="CalcController" ng-init="pageIndex=0;pageTitle='工资计算器'">
+
+  <header>
+    {{pageTitle}}
+  </header>
+
+  <div class="page" ng-show="pageIndex==0">
+    <form class="gz-form">
+      <input type="number" ng-change="showResult=false" ng-model="jiben" required min="1800" autocomplete="off" placeholder="您的基本工资/不能低于最低工资标准">
+      <input type="number" ng-change="showResult=false" ng-model="jixiao" autocomplete="off" placeholder="您的绩效工资">
+      <input type="number" ng-change="showResult=false" ng-model="jiangjin" autocomplete="off" placeholder="您的奖金">
+      <button ng-click="calc()">开始计算</button>
+    </form>
+    <section ng-show="showResult">
+      <dl>
+        <dt>工资总额</dt>
+        <dd>{{result.total | currency:'￥'}}</dd>
+      </dl>
+      <div class="hr"></div>
+      <dl class="zhichu">
+        <dt>养老 {{settings.shebao.yanglao | percent:2}}</dt>
+        <dd>{{result.shebao.yanglao | currency:'￥'}}</dd>
+      </dl>
+      <div></div>
+      <dl class="zhichu">
+        <dt>医疗 {{settings.shebao.yiliao | percent:2}}</dt>
+        <dd>{{result.shebao.yiliao | currency:'￥'}}</dd>
+      </dl>
+      <div></div>
+      <dl class="zhichu">
+        <dt>失业 {{settings.shebao.shiye | percent:2}}</dt>
+        <dd>{{result.shebao.shiye | currency:'￥'}}</dd>
+      </dl>
+      <div></div>
+      <dl class="zhichu">
+        <dt>工伤 {{settings.shebao.gongshang | percent:2}}</dt>
+        <dd>{{result.shebao.gongshang | currency:'￥'}}</dd>
+      </dl>
+      <div></div>
+      <dl class="zhichu">
+        <dt>生育 {{settings.shebao.shengyu | percent:2}}</dt>
+        <dd>{{result.shebao.shengyu | currency:'￥'}}</dd>
+      </dl>
+      <div></div>
+      <dl class="zhichu">
+        <dt>公积金 {{settings.shebao.gongjijin | percent:2}}</dt>
+        <dd>{{result.shebao.gongjijin | currency:'￥'}}</dd>
+      </dl>
+      <div></div>
+      <dl class="zhichu">
+        <dt>社保统筹 {{settings.shebao.tongchou | currency:'￥'}}</dt>
+        <dd>{{result.shebao.tongchou | currency:'￥'}}</dd>
+      </dl>
+      <div class="hr"></div>
+      <dl>
+        <dt>计税工资</dt>
+        <dd>{{result.jishui | currency:'￥'}}</dd>
+      </dl>
+      <div></div>
+      <dl class="zhichu">
+        <dt>个人所得税</dt>
+        <dd>{{result.shui | currency:'￥'}}</dd>
+      </dl>
+      <div class="hr"></div>
+      <dl class="result">
+        <dt>实发工资</dt>
+        <dd>{{result.shifa | currency:'￥'}}</dd>
+      </dl>
+      <div></div>
+    </section>
+  </div>
+
+  <div class="page" ng-controller="SettingController" ng-show="pageIndex==1">
+    <form action="">
+
+      <ul class="list">
+        <li>
+          <span>养老费率：</span>
+          <input type="number" ng-model="shebao.yanglao" ng-change="rootBroadcastChange()" placeholder="请输入养老率">
+        </li>
+        <li>
+          <span>医疗费率：</span>
+          <input type="number" ng-model="shebao.yiliao" ng-change="rootBroadcastChange()" placeholder="请输入医疗率">
+        </li>
+        <li>
+          <span>失业费率：</span>
+          <input type="number" ng-model="shebao.shiye" ng-change="rootBroadcastChange()" placeholder="请输入失业率">
+        </li>
+        <li>
+          <span>工伤费率：</span>
+          <input type="number" ng-model="shebao.gongshang" ng-change="rootBroadcastChange()" placeholder="请输入工伤率">
+        </li>
+        <li>
+          <span>生育费率：</span>
+          <input type="number" ng-model="shebao.shengyu" ng-change="rootBroadcastChange()" placeholder="请输入生育率">
+        </li>
+        <li>
+          <span>公积金费率：</span>
+          <input type="number" ng-model="shebao.gongjijin" ng-change="rootBroadcastChange()" placeholder="请输入公积金率">
+        </li>
+        <li>
+          <span>社保统筹：</span>
+          <input type="number" ng-model="shebao.tongchou" ng-change="rootBroadcastChange()" placeholder="请输入社保率">
+        </li>
+      </ul>
+      <!--<div class="btn">保存</div>-->
+
+    </form>
+  </div>
+
+  <div class="page" ng-show="pageIndex==2">
+    <h1>不是我和你吹</h1>
+    <p>你们看我帅不~~~</p>
+  </div>
+
+  <footer>
+    <a href="#" ng-click="pageIndex=0;pageTitle='工资计算器'" ng-class="pageIndex==0 ? 'selected':''">
+            <span>计算</span>
+        </a>
+    <a href="#" ng-click="pageIndex=1;pageTitle='设置'" ng-class="pageIndex==1 ? 'selected':''">
+            <span>设置</span>
+        </a>
+    <a href="#" ng-click="pageIndex=2;pageTitle='关于'" ng-class="pageIndex==2 ? 'selected':''">
+            <span>关于</span>
+        </a>
+  </footer>
+
+  <script src="index.js"></script>
+</body>
+
+</html>
