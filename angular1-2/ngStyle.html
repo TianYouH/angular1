@@ -1,0 +1,42 @@
+<!doctype html>
+<html ng-app="MyCSSModule">
+
+<head>
+  <meta charset="utf-8">
+  <style>
+    .text-red {
+      background-color: #ff0000;
+    }
+
+    .text-green {
+      background-color: #00ff00;
+    }
+  </style>
+</head>
+
+<body>
+  <div ng-controller="CSSCtrl">
+    <p class="text-{{color}}">测试CSS样式</p>
+    <p ng-style="myStyle" >用法一</p>
+    <p class="ng-style: myStyle" >用法二</p>
+
+    <button ng-click="setGreen()">绿色</button>
+    <button ng-click="myStyle={'color': 'red'}">11</button>
+    <button ng-click="myStyle={'background-color': '#000'}">22</button>
+  </div>
+</body>
+
+<script src="https://cdn.bootcss.com/angular.js/1.6.9/angular.js"></script>
+<script>
+  var myCSSModule = angular.module('MyCSSModule', []);
+  myCSSModule.controller('CSSCtrl', ['$scope',
+    function($scope) {
+      $scope.color = "red";
+      $scope.setGreen = function() {
+        $scope.color = "green";
+      }
+    }
+  ])
+</script>
+
+</html>

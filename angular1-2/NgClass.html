@@ -2,18 +2,71 @@
 <html ng-app="MyCSSModule">
 
 <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="NgClass.css">
+  <meta charset="utf-8">
+  <style>
+    .error {
+      background-color: red;
+    }
+
+    .warning {
+      background-color: yellow;
+    }
+
+    .strike {
+      text-decoration: line-through;
+    }
+
+    .bold {
+      font-weight: bold;
+    }
+
+    .has-error {
+      color: red;
+      background-color: yellow;
+    }
+  </style>
 </head>
 
 <body>
-    <div ng-controller='HeaderController'>
-        <div ng-class='{error: isError, warning: isWarning}'>{{messageText}}</div>
-        <button ng-click='showError()'>Simulate Error</button>
-        <button ng-click='showWarning()'>Simulate Warning</button>
-    </div>
+  <div ng-controller='HeaderController'>
+    <!-- 用法一：{ <className>: Boolean } -->
+    <div ng-class='{error: class, warning: !class}'>ngClass测试111</div>
+    <!-- 用法二：{ true: "<className>", false: "<className>" }[变量名] -->
+    <div ng-class='{true :"error", false :"warning"}[class]'>ngClass测试2222</div>
+    <!-- 用法三：{样式名: 变量, ...} -->
+    <p ng-class="{strike: deleted, bold: important, warning: error}">用法三</p>
+    <!-- 其他 -->
+    <!-- <p ng-class="style">用法四</p> -->
+    <!-- <p ng-class="[style1, style2, style3]">用法五</p> -->
+    <p ng-class="[style4, {'has-error': class}]">用法六</p>
+
+    <button ng-click='showError()'>Simulate Error</button><br>
+    <label>
+        <input type="checkbox" ng-model="deleted">
+        deleted (apply "strike" class)
+     </label><br>
+    <label>
+        <input type="checkbox" ng-model="important">
+        important (apply "bold" class)
+     </label><br>
+    <label>
+        <input type="checkbox" ng-model="error">
+        error (apply "has-error" class)
+     </label>
+  </div>
 </body>
-<script src="js/angular-1.3.0.js"></script>
-<script src="NgClass.js"></script>
+<script src="https://cdn.bootcss.com/angular.js/1.6.9/angular.js"></script>
+<script>
+  var myCSSModule = angular.module('MyCSSModule', []);
+  myCSSModule.controller('HeaderController', ['$scope',
+    function($scope) {
+      $scope.class = false;
+      $scope.style = 'bold'
+      $scope.showError = function() {
+        $scope.class = !$scope.class;
+      };
+    }
+  ])
+</script>
 
 </html>
